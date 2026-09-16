@@ -1,0 +1,1292 @@
+CODE REVISION: V14.0.8-R324
+DATE: 2026-09-11
+TAG: PROFESSIONAL-WORKSPACE-NAVIGATION
+
+R324 reorganizes navigation without changing any workspace/window behavior.
+Video Studio (the shared Video Library) and Video Editor now sit on the same
+global row as Kling, Veo/Flow, Dola/Seedance and Image Studio, while still
+opening their original independent Studio windows. The Kling page keeps one
+clear primary action, Tạo Video Kling. Tài liệu and Đồng bộ Video are moved to
+a compact fixed Kling footer with small icons and subdued professional styling.
+
+BACKUP BEFORE THIS CHANGE:
+I:\CODE\_BACKUPS\WORKSPACE-NAV-R323-BEFORE-20260911-163240
+
+CODE REVISION: V14.0.8-R323
+DATE: 2026-09-11
+TAG: FLOW-IMAGE-CARD-EXPORT-GUARD
+
+R323 fixes a task-specific download race observed after a successful Flow
+Generate acknowledgement. In a fresh Project, Flow can expose the uploaded
+Start Frame and the pending/generated result as two IMG cards. An ordinary
+Download control is available on both, so it is not proof that a card is video.
+
+If an official card export contains no video (the reproduced task downloaded a
+ZIP containing only `03_Suc_dan_dung_tran...jpeg`), R323 keeps that ZIP for
+audit, excludes the exact card key for the current scan, and continues waiting
+for the remaining video card. It never sends Generate again. Existing image-only
+ZIPs are ignored by private-folder resume instead of blocking every later scan.
+Only structural VIDEO backing is used as early video-ready evidence; unbacked
+posters still retain the official export probe with content validation.
+
+BACKUP BEFORE THIS CHANGE:
+I:\CODE\_BACKUPS\FLOW-IMAGE-CARD-GUARD-R322-BEFORE-20260911-161523
+
+CODE REVISION: V14.0.8-R322
+DATE: 2026-09-11
+TAG: FLOW-GENERATE-STRICT-CTA-AND-PRIVATE-ZIP-RESUME
+
+R322 fixes two independent Flow regressions observed on the current
+flow.google.com composer.
+
+1. A long Prompt can keep the editable textbox rectangle at one line while the
+   composer root grows vertically. The real enabled CTA (`start generation
+   arrow_forward`) was already found inside the composer, but its old geometry
+   score became negative and the Tool stopped before mouse-down. R322 adds a
+   strict, unique fallback only for an explicit Generate/Submit arrow on the
+   right edge and inside the current composer root. Exact element-at-point,
+   HWND/PID/cursor proof, native mouse and exact-once submission remain required.
+
+2. Chrome can finish an official `tải xuống.zip` a fraction after a bounded
+   recovery pass exits. The next pass used to classify that completed ZIP as a
+   pre-existing file and ignore it forever. R322 first checks only the immutable
+   per-job download directory. One stable ZIP/video is imported immediately;
+   ambiguous folders still fail closed. It never scans the user's general
+   Downloads folder and never selects another Task's file.
+
+BACKUP BEFORE THIS CHANGE:
+I:\CODE\_BACKUPS\FLOW-GENERATE-RESUME-R321-BEFORE-20260911-150750
+
+CODE REVISION: V14.0.8-R321
+BASE APPLICATION: 5.8.0
+DATE: 2026-09-11
+
+R321 fixes Credit refresh being deferred forever after restarting the Tool.
+Historical submitted/download-pending journal rows no longer masquerade as a
+live Chrome owner; Credit now yields only to fresh Generate priority, the exact
+Profile currently owned by the automatic export scanner, or the existing
+cross-process Profile lease guard. Persisted deferred state carries a timestamp
+and expires from the dashboard after 45 seconds, so old R318/R320 metadata is
+not displayed as current activity. Opening the Credit board also forces one
+immediate cache refresh wave while keeping video creation/download priority.
+
+---
+
+CODE REVISION: V14.0.8-R320
+BASE APPLICATION: 5.8.0
+DATE: 2026-09-11
+
+R320 removes the redundant initial “Sẵn sàng · 100 tác vụ · 10 trang · Profile
+Google” sentence from the Flow task footer while preserving the underlying
+status variable for meaningful runtime updates. The Chrome reminder is now a
+compact, muted information card with a small drawn icon, soft blue-grey border,
+subtle dark surface, and responsive text wrapping. Generation/download logic is
+unchanged.
+
+---
+
+CODE REVISION: V14.0.8-R319
+BASE APPLICATION: 5.8.0
+DATE: 2026-09-11
+
+R319 upgrades the workspace guide marker from four static lines to a continuous
+neon perimeter animation. Four focus-free, borderless strips surround the real
+control without covering it; a bright head and moving dashes travel around all
+four sides. The marker follows control movement/resize every 250 ms, stays above
+the guide window, never invokes a production action, and destroys every overlay
+and timer when the lesson changes or the guide closes.
+
+---
+
+CODE REVISION: V14.0.8-R317
+BASE APPLICATION: 5.8.0
+DATE: 2026-09-03
+
+R317 is based on the restored R296 user-confirmed 3/3 generation path. It does
+not restore upload-ahead or parallel mutation of one Flow composer. Every image
+is sent under a unique temporary filename, the old Start/End slot must be proven
+empty before upload, and a media choice must resolve to exactly one filename or
+one new provider key. This prevents a stale/near-name asset from being attached.
+
+The redundant per-Profile Generate delay is reduced from 10 seconds to 2 seconds;
+accepted renders still overlap on Google's servers. Download recovery keeps the
+authenticated Flow session, wakes after 250 ms, scans up to eight rows per lease,
+returns up to 120 mounted cards, excludes cards already claimed by another row,
+and records request-side provider identity when the response body is opaque.
+
+---
+
+CODE REVISION: V14.0.8-R316
+BASE APPLICATION: 5.8.0
+DATE: 2026-09-03
+
+R316 disables upload-ahead by default and restores the mature sequential upload
+path. It fixes the regression where an ancestor-derived label let the staging
+token be typed into the Prompt: exact search now accepts only a native INPUT
+whose own search attributes match, lies outside the composer, and holds focus
+before any key is sent. Draft cleanup now recognizes an occupied Start/End
+composer from its local thumbnails even when Flow hides the Start/End buttons,
+so an old frame cannot silently remain beside the new frame.
+
+R315 lets an explicit Flow Generate retire one narrowly-proven orphaned
+flow-download Chrome: the recovery owner has no PID or DevTools port, its
+headless browser has no live DevTools endpoint, the state is at least 45 seconds
+old, and the current Tool owns the cross-process Profile lock. Normal Flow,
+manual, fresh, unknown, and externally locked owners remain fail-closed. This
+fixes the permanent "Metadata Profile vẫn ghi nhận tác vụ tạo video" block after
+a recovery worker's parent exits. R314 CSS-card upload binding and R312 durable
+automatic download remain unchanged.
+
+R314 supports Flow's new CSS-background media cards during upload-ahead handoff.
+The exact staging-token search must be visibly applied and resolve to one unique
+durable media URL before the Tool can attach a card. This fixes R313's
+candidateCount=0 failure without nearest/newest-card or duplicate-upload fallbacks.
+After Generate acknowledgement, R312 durable recovery still verifies, exports and
+imports the matching video automatically.
+
+R313 fixes upload-ahead handoff when Flow retains a media-library search filter
+from an earlier task or batch. After a short visible-grid probe, the Tool searches
+the task's unique staging token, binds the one filtered result to its durable media
+URL, and re-proves the same coordinate/key after opening the asset menu. Tokens
+hidden from card text are also recognized in Flow's media redirect URL. It still
+never selects the nearest asset, uploads the file twice, or generates without an
+exact composer-thumbnail proof. R312 fast/lossless background download and the
+FLOW-GEN-STABLE-R307 generation baseline remain unchanged.
+
+---
+
+CODE REVISION: V14.0.8-R238
+BASE APPLICATION: 5.8.0
+DATE: 2026-08-11
+
+R238 forces every operational Google Flow lease to run headless, including
+startup recovery, creation, export watching and download. It resets the old
+saved visible preference and makes the monitor read-only: it can mirror an
+active headless tab but cannot enable visible future jobs or open an idle login
+window. The verified Generate, download, validation and Library import pipeline
+is unchanged. Explicit login/Workspace setup remains a user-opened window.
+
+---
+
+CODE REVISION: V14.0.8-R237
+BASE APPLICATION: 5.8.0
+DATE: 2026-08-11
+
+R237 makes new/default Google Flow creation and recovery sessions headless
+while preserving saved visible-monitor preferences and the safe manual live
+viewer. Parallel task startup now uses a short 0.35-second stagger instead of
+1.5 seconds; the existing per-Profile stage locks and queue semaphore remain
+unchanged. The per-row Prompt column grows from 224 to 384 pixels, with a wider
+scrollable table so neighboring columns retain their previous space.
+
+---
+
+CODE REVISION: V14.0.8-R236
+BASE APPLICATION: 5.8.0
+DATE: 2026-08-10
+
+R236 makes the Chrome Flow monitor useful even when an earlier scheduled
+download has already launched an authenticated headless Chrome. The monitor
+button now focuses an existing visible Flow window, opens a read-only live
+viewer for an existing headless Flow tab, or opens a normal login window only
+when the Profile is idle. The live viewer only captures page screenshots over
+the local DevTools port; it never opens a second Profile, navigates, clicks or
+changes an active Flow task.
+
+---
+
+CODE REVISION: V14.0.8-R235
+BASE APPLICATION: 5.8.0
+DATE: 2026-08-10
+
+R235 removes the shared Prompt / Reference Image composer from the visible Veo
+workspace. Prompt and image input remain per task row, while Flow model,
+duration, aspect ratio, resolution and output controls move directly beneath
+the page heading. The task toolbar and table regain the available vertical
+space; queue pause remains available beside the task actions.
+
+---
+
+CODE REVISION: V14.0.8-R234
+BASE APPLICATION: 5.8.0
+DATE: 2026-08-10
+
+R234 enables visible Chrome monitoring by default for both Flow creation and
+the pending-download recovery scan. The Veo page adds a persistent Chrome Flow
+hiển thị switch plus Mở Chrome theo dõi. Existing headless tasks are never
+converted in place, so an in-progress render/download remains safe; the setting
+applies to the next creation or scan.
+
+---
+
+CODE REVISION: V14.0.8-R233
+BASE APPLICATION: 5.8.0
+DATE: 2026-08-10
+
+R233 reorganizes the Veo/Flow Studio presentation into a balanced professional
+workspace: the Lê Hạ AI brand is visible in the top header, Profile/Workspace
+controls are grouped into logical rows, the live master Prompt is now wide and
+multi-line, and task/output controls are split into compact horizontal strips.
+Video settings use two balanced rows and the workspace reserves practical
+vertical room for the visible composer and task table on normal desktops. The
+composer/settings and task list are a resizable vertical split, keeping the
+task toolbar and footer reachable rather than squeezing the table.
+Flow creation, downloads, Profile Manager and all existing task callbacks are
+unchanged.
+
+---
+
+CODE REVISION: V14.0.8-R232
+BASE APPLICATION: 5.8.0
+DATE: 2026-08-10
+
+R232 adds a Profile Manager to the Veo/Flow page. It can add a Google Profile,
+edit its display label, Workspace, Chrome/Edge path and proxy, safely remove it
+from the Veo list, and open its isolated Flow login session. Profile edits keep
+the active Veo prompt rows in place and are blocked while that Profile owns a
+Chrome window, Flow render or download-recovery journal entry. Clearing a
+Workspace requires its own confirmation. Consumer Google Flow remains
+browser-session based, so no plaintext API key is collected or stored.
+
+---
+
+CODE REVISION: V14.0.8-R231
+BASE APPLICATION: 5.8.0
+DATE: 2026-08-10
+
+R231 fixes the R230 startup error caused by a malformed global Tk font option.
+Segoe UI is now applied only through safe explicit font tuples, so the Tool
+starts normally while retaining the unified dark interface.
+
+---
+
+CODE REVISION: V14.0.8-R230
+BASE APPLICATION: 5.8.0
+DATE: 2026-08-10
+
+R230 applies a single Google-Flow-inspired premium dark visual system to the
+main Tool, Veo workspace, legacy dialogs, Video Library and Video Editor.
+It standardizes typography, depth, buttons, inputs, tables, scrollbars and
+status colors without altering provider callbacks or task behavior.
+
+---
+
+CODE REVISION: V14.0.8-R229
+BASE APPLICATION: 5.8.0
+DATE: 2026-08-10
+
+R229 compacts the dedicated Veo/Flow workspace by hiding the unused sidebar,
+debug pill, opened-video import shortcut, redundant large prompt composer,
+video-type/output-path columns, and visible horizontal scrollbar. All associated
+state variables and provider callbacks remain intact for background workflows.
+
+---
+
+CODE REVISION: V14.0.8-R228
+BASE APPLICATION: 5.8.0
+DATE: 2026-08-10
+
+R228 refreshes the product identity and Video Studio with a permanent black/orange
+theme, provider-count filters, one-click local video upload, a sticky Merge Video
+action, one-click logo removal toast, and a tighter Flow star repair footprint.
+
+---
+
+CODE REVISION: V14.0.8-R227
+BASE APPLICATION: 5.8.0
+DATE: 2026-08-10
+
+R227 separates Veo/Flow and Kling provider badges in Video Library metadata.
+It also tightens the Flow logo repair region to the actual star footprint so
+substantially less background is interpolated and the repaired area is less visible.
+
+---
+
+CODE REVISION: V14.0.8-R226
+BASE APPLICATION: 5.8.0
+DATE: 2026-08-10
+
+R226 adds a reversible Remove Logo action to each Video Library card. It
+creates a separately validated edited copy, preserves the original provider
+export, audio, duration and resolution, and never overwrites source media.
+
+R225 handles Chrome ignoring the cross-origin download attribute. After the
+exact card navigates to Flow's signed flow-content.google/video URL, the Tool
+captures that observed redirect, streams it into the private task directory,
+validates the video and imports it into the shared library.
+
+R224 correlates the visible result poster's provider media id with Flow's own
+hidden VIDEO element. This provider DOM evidence replaces the CORS-blocked HEAD
+probe for a unique fresh x1 card and runs before editor navigation, allowing
+Chrome to download the exact completed video automatically.
+
+R223 uses the exact media redirect exposed by a unique, task-bound fresh x1
+Flow card when its editor/menu omits Download controls. The Tool removes only
+the thumbnail rendering parameter, requires a same-origin Flow redirect, and
+proves the authenticated HEAD response is video/octet-stream before Chrome
+downloads it. Shared Projects do not receive this automatic fallback.
+
+R222 recognizes completed Flow cards rendered as CSS-background DIVs. In a
+persisted fresh x1 Project only, the provider's exact /edit/<asset> route is
+accepted as the card identity even when the grid exposes no img/video/canvas.
+Shared Projects keep the existing strict media/baseline matching rules.
+
+R221 retries the exact baseline-proven Flow editor when a video finishes after
+the first detail probe. Previously the first not-yet-ready editor permanently
+set editor_probe_attempted for that scan, so a later visible completed video
+could never expose its official Download action to the worker. The retry is
+bounded to the same proven card every 12 seconds and remains fully automatic.
+
+R220 applies newest-Task priority to every pending Flow recovery entry point,
+including the in-app quiet poll and the optional Windows background worker.
+Those scanners share the same recovery mutex with the user button; therefore
+a poll that wins the lock can no longer open an old Project such as 9e679
+before the newly submitted 052c Task. Historical Tasks resume only after the
+newer eligible Task leaves the pending queue.
+
+R219 makes the user-clicked Quet tac vu cho action select the newest eligible
+Flow Task for that Profile. The background scheduler remains fair to older
+pending Tasks.
+
+R218 detects only duplicate tabs with the identical Task Project URL. If the
+assigned tab has no output card while its twin has one, the Tool switches to
+the twin and closes the verified empty duplicate.
+
+R217 removes only a Flow provider "Application error" tab that opens beside
+the assigned Project. Normal Flow pages and the active Project are never
+closed.
+
+R216 waits for Flow to return from the single editor probe to the Project
+grid before it opens the proven card's right-click Tai xuong menu. This avoids
+using stale card coordinates while the editor page is still navigating.
+
+R214 uses the official Flow card context menu when an editor has no labelled
+Download button: it right-clicks only the proven new result card then chooses
+Tai xuong from that local menu.
+
+R213 makes bounded pending recovery fair across a Profile: the least-recently
+probed eligible Project is selected before a repeatedly failing newer one.
+
+R212 preserves both cards in an isolated fresh Project during recovery. The
+project itself already binds the Task, so the x1 resolver can select its newest
+card; shared Projects retain the persisted baseline hash filter.
+
+R211 adds privacy-safe recovery diagnostics for the selected Flow cards and
+editor-export path, so a pending Task reveals whether its editor was reached
+without saving card text, prompts, signed URLs, or media URLs.
+
+R210 fully excludes legacy R164-less records from pending-only scans before
+they are updated or opened, so the current isolated Task gets the first and
+only recovery slot.
+
+R209 makes the visible 'Quet tac vu cho' button use the same fair one-pending-
+task path as the background worker. It no longer sweeps old manual tasks and
+contends with the active Flow Profile.
+
+R208 completes the fresh Project x1 rule when both Start Frame and output have
+editor links: with exactly two new cards in that isolated Project, Flow's
+newest-first card is used and verified in its editor before export.
+
+R207 handles Flow grids that reveal an editor only after clicking a proven
+card. For a fresh x1 Project where a refreshed Start Frame causes exactly two
+new cards, it opens the newest card, verifies its /edit route, and exports only
+there.
+
+R206 excludes the refreshed Start Frame/input image when a fresh Flow Project
+contains both it and one editor-backed generated card. This lets the exporter
+open the only Flow /edit/<asset> result instead of stopping at two new posters.
+
+R205 opens the exact Flow editor link of a baseline-proven new card before
+exporting. This avoids treating Flow's generated poster image redirect as an
+MP4. Recovery scans are also serialized across the GUI, timed poll and Windows
+background worker, preventing them from racing the same Google Profile.
+
+R204 added a direct export fallback for Flow cards that have no usable Download
+menu. The signed-in Flow page first checks the exact `media.getMediaUrlRedirect`
+link rendered on the proven new card; only a video/octet-stream response is
+allowed to trigger Chrome's own download. The URL, headers and cookies remain
+in memory and are never written to the journal.
+
+R203 fixes automatic Flow export matching when Flow's Video rail does not
+publish an active state. For a task with a proven pre-Generate card baseline
+or a fresh Project, a new loaded poster is now eligible for that exact card's
+official Download action; old/uploaded assets remain excluded by the baseline.
+
+R202 turns the manual library action into "Quét Video Profile". It first reads
+the recent Project links rendered by Flow's own signed-in home page, then scans
+the first recent Project with visible Video cards (with the pinned Workspace as
+fallback). The command reports the real error text instead of only "lỗi 1".
+
+R201 adds the user-triggered "Quét Thư viện Workspace" command. It opens only
+the explicitly pinned Flow Project, filters only Video assets, opens one visible
+card at a time, uses Flow's official Download action and imports verified files
+once into the shared library. It never guesses across unpinned Projects; the
+existing "Quét video chờ" remains the narrower journal-pending recovery.
+
+R200 adds protocol-first Flow state synchronization.  The signed-in Flow tab's
+own status traffic is reduced to non-secret route/operation/media/state metadata
+and written straight to the durable task journal, so the Tool can distinguish
+rendering, completed-download-pending and provider-failed states without card
+hover estimates.  No request body, cookie, prompt, credential or signed media
+URL is persisted.  The official card Download and manual open-video import
+remain fallbacks when Flow does not expose an export URL in its own response.
+
+R199 synchronizes the run-time revision constant and CHAY_THU_TOOL title with
+CODE-REVISION.txt, so the running Tool can no longer display a stale R193 code
+after source updates.
+
+R198 renames the active VEO Studio toolbar's existing manual import control to
+"Tải video mở → Thư viện", matching its actual behavior and avoiding the
+confusion with the unused legacy Flow screen.
+
+R197 starts the first persisted Flow recovery scan 1.5 seconds after the Tool
+is ready (then returns to the 45-second cadence), so existing completed jobs
+are not left stale after a restart.
+
+R196 enables Flow network capture in the live post-Generate watcher, not only
+in later recovery. The live watcher now consumes Flow's own status/export
+responses and immediately imports a completed provider-original video when
+the Flow response exposes it.
+
+R195 gives the scheduled Flow downloader its own Windows mutex. A background
+worker no longer blocks `CHAY_THU_TOOL` or makes the GUI look like a duplicate
+instance; it still exits before scanning when the interactive Tool is active.
+
+R194 observes the exact saved Flow Project's own network responses during
+recovery. A confirmed completed provider state is reflected in the Tool before
+library import; when Flow exposes its short-lived Google media export URL, the
+worker downloads and validates it directly. The older official card Download
+route remains a fallback, and the Flow screen now has a clear manual
+"TẢI VIDEO ĐANG MỞ → THƯ VIỆN" fallback.
+
+R193 adds an opt-in Windows Task Scheduler Flow worker. It wakes once per
+minute while the main Tool is closed, uses the same journal/profile/cookies to
+recover provider-original exports, then exits. It yields immediately whenever
+the visible Tool owns the single-instance lock. Batch completion now closes an
+idle visible Flow Chrome tab; later pending export recovery remains headless.
+
+R192 makes the Flow pending-export scanner a bounded, fair poller: each
+45-second pass gives priority to the newest isolated Project and probes only
+one job per Profile for 95 seconds. An old shared Project with ambiguous cards
+can no longer block automatic import of later, provably isolated VEO exports.
+
+R191 extends the 45-second Flow pending-export scan with an exact-profile
+headless Flow worker. When no visible Flow tab remains, it reopens only the
+persisted Project, uses Flow's official card export, validates the file, and
+imports it into the Video Library before closing the hidden worker.
+
+R190 restores the panel-first image attachment route: use its exact Thêm vào
+câu lệnh button when present and right-click only when it is absent. VEO Flow
+defaults are Gemini Omni Flash, 10s, Thành Phần, 9:16, and x1.
+
+R189 opens the first visible Flow tab directly at Flow, so there is no spare
+about:blank helper tab. After upload it selects Tất cả nội dung nghe nhìn,
+right-clicks the exact uploaded image to attach it, then explicitly selects
+Thành Phần in the Video configuration.
+
+R188 fixes the Flow attachment path to always use the selected image's own
+right-click Add to prompt command. The first Flow job reuses the existing
+lease target, so the visible spare about:blank tab is no longer created.
+
+R187 makes the panel-local Thêm vào câu lệnh button the normal attachment
+action after image selection. Right-click is used only when that button is
+absent, then remains scoped to the selected asset's exact context menu.
+
+R186 follows Flow's actual asset workflow: right-click the uploaded image,
+select its local Thêm vào câu lệnh menu action, enter Prompt, then select
+Video/Khung hình configuration and submit. Prompt is re-proved after settings.
+
+R185 configures Video as Frames/Start Frame before opening Flow's image
+library. The Bắt đầu/Kết thúc labels are structural—not clickable controls—so
+the Tool verifies that state and lets the panel-local Add action bind the image.
+
+R184 waits for Flow's Video composer to remain stable after turning off Tác
+nhân before it opens the image library. If Flow remounts Agent, the task stops
+before upload rather than placing an unbound asset in the project library.
+
+R183 prevents opening a Chrome Flow window just because the Tool/Veo screen
+starts. The periodic download-pending scan only borrows a live Flow session;
+without one, it preserves the Task for the next retry or explicit manual scan.
+
+R182 turns a fresh Flow project out of Tác nhân and into its normal Video
+composer before opening the image library. This ensures the Bắt đầu target
+exists before R181 directs the selected image to its Start Frame slot.
+
+R181 explicitly selects Flow's composer-local Bắt đầu destination before the
+panel-local attachment action, then requires positive proof that the selected
+Start Frame thumbnail is bound before Prompt/Generate.
+
+R180 requires positive proof that the selected Start Frame thumbnail is bound
+inside the bottom Flow composer.  A closed media picker is no longer treated as
+an attachment commit.  When the thumbnail is absent, Tool reopens the bounded
+picker and retries the exact selected image twice, then stops before Generate
+instead of sending a detached image/prompt request.
+
+R179 preserves the provider's own compact error detail whenever the exact Flow
+Generate RPC returns HTTP 400+.  The Tool can now distinguish a quota, rate,
+policy, or invalid-input rejection rather than reporting only HTTP 400.  It
+does not retry an explicit provider rejection blindly.
+
+R178 retries only durable Flow `download-pending` exports every 45 seconds in
+the background.  It uses the recorded Project and Flow's official Download
+action, never calls Generate, and does not show a Chrome window.  The export
+scanner needs only 512 MB free space; creating/uploading videos retains the
+2 GB preflight guard.
+
+R177 restores real bulk Flow throughput without mixing task identity.  Every
+row gets an independent Flow tab and fresh Project, starts 1.5 seconds after
+the preceding row, and is bounded by the Studio queue-limit setting.  Unsafe
+same-Profile browser stages (project setup, upload, composer and Generate) are
+still serialized, but each acknowledged render and its verified export watcher
+continue concurrently.  Downloads remain Project-bound, validated originals
+and are imported once into the shared Video Library.
+
+R176 adds a deterministic recovery action for Flow results which are visible
+in Chrome but cannot be safely matched to a task card by automation.  The user
+opens one exact Flow video and clicks "Nhập video đang mở" in the Studio.  The
+Tool attaches only to that existing Project tab, requires exactly one detail
+view, invokes only Flow's official Download menu, verifies Chrome wrote a
+real video file, and imports the original once into the shared Video Library.
+It never creates a project, changes a prompt, re-submits Generate, selects a
+grid card, or downloads a guessed media URL.  The Flow export, including any
+visible watermark and SynthID provenance, remains untouched.
+
+R175 makes the pinned Flow Workspace result hand-off practical without
+weakening parallel/restart safety.  A Workspace task is serialized end to end;
+when Flow's x1 result grid exposes more than one post-baseline card and omits
+task ids, the verified newest card is exported through Flow's official
+Download control.  Card matching now combines stable asset identity with its
+stable thumbnail path, so generic repeated DOM ids no longer hide a newly
+created video as if it existed before Generate.  Only an exported, validated
+original becomes Done in the shared Video Library; Flow watermark/SynthID
+remains untouched.
+
+R174 makes Flow retry and library status evidence-based.  An explicit Flow
+render rejection, or a pre-acceptance failure, can retry automatically up to
+two times.  A request already accepted by Flow is never re-submitted merely
+because its output has not appeared yet; it is kept in the durable recovery
+journal and scanned from its exact pinned Project through Flow's official
+Download action.  The visible Flow table now refreshes from that journal so
+an imported export shows Done/library path and a provider rejection shows Lỗi.
+The result baseline prefers stable Flow asset identifiers to re-signed poster
+URLs, so an old card does not become a false "new" candidate after reload.
+Original Flow exports, including visible watermark and SynthID, are preserved.
+
+R173 fixes the final Flow failure boundary. A Generate RPC can be accepted
+before Flow later displays the Vietnamese or English provider toast "Not
+successful / Sorry, something went wrong". The Tool now normalizes that toast,
+ends the task as a provider render failure, and never keeps scanning/download-
+pending or imports an old project card as if it were the requested result.
+
+R172 removes the live Flow watcher-tab hand-off.  After an accepted Generate,
+the Tool now keeps the exact visible Workspace composer tab in place and uses
+that same bound target to observe rendering, invoke Flow's official Download,
+and import the original export into the shared Library.  It never opens or
+closes a substitute tab in the submit-to-result window.  The next queued row
+waits for the current result hand-off before it can change the pinned
+composer, preventing cross-task draft/result confusion.
+
+R171 fixes result matching in a reused Flow Workspace. Flow rotates signed
+thumbnail URLs when a Project is reopened; the old full URLs made every
+previous output look new and caused an honest ambiguity stop. The pre-submit
+baseline and persisted journal now canonicalize thumbnail identity to the
+provider origin/path plus card attributes, so old cards remain excluded after
+reload. Only the genuine new card proceeds to Flow's official Download action.
+
+R170 repairs Flow export discovery for current project grids. Flow can render a
+completed video as a thumbnail image within the project Video asset list, with
+no readable duration or play text until the card is hovered. The Tool now
+selects and verifies the project-local Video filter even when Flow uses a
+focusable DIV rail, then accepts a fully loaded thumbnail only in that
+verified Video list. It remains bound to the pre-Generate snapshot and uses
+only that card's official Flow Download UI before importing the untouched
+provider export to the shared Library.
+
+R169 fixes Flow exports which were visible and complete in the matching
+Workspace but were blocked only because the page's preview-duration metadata
+did not exactly equal the requested duration. A unique output card that is
+new against the pre-Generate snapshot now proceeds through Flow's official
+Download action. Duration remains a selector only when several new cards are
+present. The original Flow export/SynthID is preserved and the shared Library
+still deduplicates by provider source and file content.
+
+R168 makes the Google Flow/Veo renderer visibly observable.  Flow Chrome is
+no longer hidden or minimized after its authenticated DevTools session becomes
+ready.  The Tool restores a normal visible browser window at a stable desktop
+position and brings the exact Workspace/Project tab forward before composing
+and again while the verified export watcher is active.  The table records that
+Chrome Flow is visible so a user can directly distinguish a provider queue,
+render card, provider toast, or a request that never becomes an output.
+
+This does not relax result verification: only an official Flow export from the
+matching Project is imported into the shared Video Library.  Kling's separate
+background browser remains unchanged.
+
+R167 makes Flow request/result status evidence-based. Some current Google Flow
+builds return HTTP 2xx for the exact Generate RPC without exposing a public
+Task or Queue identifier. The Tool now records that honestly as "Đã nhận
+request · chờ Flow xác nhận" with no invented percentage. It calls a task
+rendering only when Flow exposes task/queue/progress evidence, and records
+"Flow chưa trả kết quả" when the watcher cannot find a verified export.
+
+The Flow watcher now recognises the project Video filter when Material UI
+prefixes its visible label with an icon token such as "videocam video". Timeout
+diagnostics count only privacy-safe evidence (new media count, candidate count,
+filter state and provider notice); no signed asset URLs, raw prompt or card
+text are persisted. The original export/SynthID remains untouched. Kling is
+unchanged.
+
+R166 corrects an important Flow-history distinction. A stopped Chrome/disk
+guard, an old pre-R164 task without safe card evidence, or a download scan
+that cannot start is no longer displayed as “Đang tạo video 55%”. The history
+now shows “Tạm dừng · thiếu dung lượng”, “Tác vụ cũ · cần tải thủ công”, or
+“Đã gửi Task · chờ kiểm tra” and displays no percentage until the Tool has
+actual provider/export evidence. This avoids treating a pending journal entry
+as a fresh confirmed render.
+
+R165 makes Google Flow task visibility durable and unambiguous. After Google
+accepts a task, the table now says “Đang tạo video” with a clearly labelled
+stage estimate. It reaches “Done” only after the official Flow export has
+been validated and imported into the shared Video Library. Each task appends
+a bounded non-secret timeline to the persistent recovery journal. The new
+“Nhật ký video” button shows completed, rendering, waiting-download and
+error tasks after the Flow/Chrome window or the Tool has been reopened; its
+details can be copied for support. The former “URL VIDEO 720” column now
+shows only a verified result state, not a temporary signed provider URL.
+
+Kling remains unchanged and the original Google Flow export/SynthID remains
+preserved.
+
+R164 makes the Google Flow export recovery durable for the shared Video
+Library used by Kling. Before Generate, the Tool now journals SHA-256
+fingerprints for every existing Flow output card. It keeps no raw signed media
+URL, cookie, or prompt. A live watcher or a later “Quét video chờ” operation
+reopens only the recorded Workspace, excludes those old cards using the
+fingerprints, officially downloads the proven new Flow export, validates it,
+and imports the untouched provider original once into the shared library.
+
+Earlier Workspace records that lack these fingerprints remain deliberately
+pending: the Tool will not guess which existing Flow card belongs to an old
+task. Kling remains unchanged.
+
+R163 refines the Flow Workspace queue progress. The coordinator still wakes
+internally every 0.75 seconds to release the next safe task promptly, but it
+now emits the same “waiting for the previous export” update once immediately
+and at most once every 12 seconds thereafter. A queued task is not frozen: it
+will automatically proceed when the preceding Flow export is imported or
+finishes with a terminal download status. Kling remains unchanged.
+
+R162 fixes the Flow Studio batch-queue control. The “TẠO FLOW HÀNG LOẠT”
+
+R162 fixes the Flow Studio batch-queue control. The “TẠO FLOW HÀNG LOẠT”
+button no longer becomes unavailable while an accepted Flow task is rendering
+or its original export is being watched. A new click queues only newly checked
+rows; a row already sending, rendering, or downloading is retained but skipped
+with a clear no-duplicate status. The pinned Workspace composer remains
+serialized per Google Profile, so new rows advance safely after the current
+composer/render slot is released; different Profiles can still progress in
+parallel. Accepted original Flow exports continue to import automatically into
+the shared Video Library used by Kling, with Google Flow provenance preserved.
+
+Kling remains unchanged.
+
+R161 is a Flow Workspace follow-up with no Kling workflow change. It confirms
+the R160 accepted-Task lifecycle uses a separate download watcher and
+normalizes the remaining watcher/recovery progress and error messages to
+UTF-8 Vietnamese. The watcher only opens the exact Project already recorded
+for the accepted Task and never issues another Generate.
+
+R160 fixes the Flow Start-Frame picker state machine. The Tool now recognizes
+only the bounded central media picker; it no longer mistakes the permanent
+Flow navigation/library labels for an open picker and waits forever. After an
+asset is selected, the attach action is resolved only inside that same picker
+and clicked through a trusted browser event. A picker that closes after a
+valid attach can proceed immediately to configuration/Prompt instead of being
+reported as a stalled upload. Flow Workspace progress/error text is stored as
+proper UTF-8 Vietnamese, eliminating the mojibake visible in R159 logs.
+
+R159 scopes Workspace Video Frame cleanup to attachment UI inside the active
+composer. Visible project assets/results near the prompt no longer masquerade
+as an old Start/End Frame and block a task before its selected new image is
+attached. A real Frame is removed only when Flow exposes exactly one local
+removal control bound to that attachment.
+
+R158 fixes a false Workspace Video stop before Prompt entry. Current Google
+Flow Start/End composers may expose structural controls in the editor text
+tree after Backspace.  R157 and earlier interpreted that UI-only readback as
+a previous Prompt and stopped before entering the requested task text.
+
+The initial draft clear is now only a native best-effort reset.  The final
+gate remains strict: the Tool must select the exact mounted composer, enter
+the new Prompt through Chrome trusted input, read it back exactly, and prove
+that the nearby Generate action is enabled before it can submit.  Therefore
+an old Prompt cannot silently be used, while Start/End labels no longer block
+a valid task.  Kling remains unchanged.
+
+R157 replaces the false Flow-profile-busy loop with a guarded lease state
+machine.  Before a Workspace task opens Chrome, the Tool now first reuses a
+verified live Flow session.  If there is only an in-memory reservation that
+never published a browser process, DevTools port, or tab, it is released only
+after proving that the durable task marker is idle or belongs to the same old
+token and that the exact Chrome profile is fully released.  A current startup
+gets a short grace period and cannot be cancelled.  The old reserve -> wait
+12 seconds -> reserve retry has been removed from the active Workspace path.
+
+This specifically covers the case where a previous Flow action failed before
+Chrome launched: the Profile no longer remains permanently reported as having
+another video task.  A genuinely live Chrome/Flow task remains protected and
+is never reclaimed.  Kling remains unchanged.
+
+R156 makes the Flow Workspace setup path self-explanatory and prevents the
+misleading malformed/empty URL popup.  The Workspace bar now offers Dán URL
+to paste the copied Flow Project route, an explicit one-time five-step guide,
+and a clear empty-field message before validation.  The selected Project
+remains profile-bound; Kling and its UI are unchanged.
+
+R155 fixes the remaining Flow setup lock observed in a live Profile: the
+metadata could correctly show ``video_creation_reserving=True`` while PID,
+DevTools port, SingletonLock, and Profile Chrome owner were all absent.  That
+state is an abandoned same-Tool reservation created before Chrome launch, not
+an active Flow render.  When the user explicitly opens Workspace setup, R155
+cancels only that exact in-memory reservation after rechecking its token,
+zero PID/port/target, and Profile release.  It cannot cancel a real Chrome
+process, an acknowledged generation, or another Tool's Profile lock.
+
+R154 fixes the Workspace setup dead-end shown when a user pressed Create
+before pinning a Workspace.  The Flow Studio now validates the selected
+Profile's Workspace URL on the UI thread, before it marks a task as running,
+starts a worker, reserves Chrome, or holds a Profile lock.  A missing
+Workspace therefore leaves the Profile immediately available for the user to
+click Open for setup, paste the Project URL, and pin it.
+
+Opening Flow setup now also repairs a persistent Flow creation marker only
+after proving the exact Chrome Profile is completely released and acquiring
+the cross-process Profile lock.  It never clears a live in-memory lease, a
+live Chrome process, a DevTools endpoint, or another Tool's lock.  A genuine
+active task remains protected and reports that it is still active.
+
+R153 rebuilds only the Google Flow / Veo creation path around a profile-pinned
+Workspace Video.  Kling code and the existing Kling UI remain unchanged.
+
+Each Google Profile now stores one explicit Flow Project URL selected by the
+user.  Every batch row opens that exact Project in a target-bound tab; it no
+longer creates a new Project, adopts a restored tab, or searches across Chrome
+tabs.  The Studio exposes this as WORKSPACE VIDEO with Open for setup and Pin
+Workspace actions.  The user signs in once, turns off Flow Agent / chooses the
+normal Video composer in that Project, pastes the /project/... URL, and the
+Tool uses only that workspace afterwards.
+
+The entire unsafe browser transaction (clear old prompt/frame, attach the new
+frame, configure, enter/verify prompt, and provider acknowledgement) is
+serialized per Profile.  Rows may still be loaded/queued in batches of ten and
+different Google Profiles work independently.  Within a single consumer Flow
+Workspace, one output is verified and downloaded before the next row is sent:
+when Flow returns an asynchronous acknowledgement without a stable task id,
+this is the only way to prove which completed video belongs to which row and
+to prevent a wrong or duplicate library import.
+
+Before every image-to-video task, R153 now proves the old Prompt was cleared
+using trusted input and removes only a unique local prior Frame control.  If
+Flow cannot prove that state, it fails closed before upload rather than mixing
+the previous image/prompt into a new request.  Accepted exports are still
+watched in a separate strict tab, downloaded through Flow's official Download
+menu, validated/deduplicated, journaled for recovery/manual scan, and stored
+as original provider exports with SynthID/watermark preserved.
+
+R152 repairs a Flow session-recovery defect that could block a new create
+request for 90 seconds and then incorrectly report that the same Profile was
+already creating a video.  A retained Flow browser is still reused whenever
+its Chrome process is alive.  However, if the exact Chrome process owned by
+this Tool has exited, the manager now verifies that the profile is released,
+cleans only stale markers, and immediately replaces the dead local lease with
+a new one.  It never takes over a live Chrome or another Tool's profile.
+
+The fallback wait is reduced to 12 seconds.  It is only used while a legitimate
+Flow Chrome startup is publishing its DevTools endpoint or while an external
+live Flow owner can be attached safely.  A dead local session no longer makes
+the Create action appear frozen.  Kling is unchanged.
+
+R151 repairs the current Flow Start Frame upload stall.  Flow now sometimes
+mounts its media library as an in-project region rather than an ARIA dialog;
+the prior code discarded that valid picker state and could wait without ever
+selecting the newly uploaded image.  The picker accepts both forms and the
+upload stage publishes a heartbeat every 12 seconds.
+
+Runtime.evaluate is bounded to four seconds while Flow indexes an upload.  A
+stalled task-bound CDP connection is reconnected only to its assigned tab; if
+three probes still fail, the task stops with a clear Flow-unresponsive error
+instead of waiting silently for minutes.  The upload phase is capped at 75
+seconds.  Kling remains unchanged.
+
+R150 repairs a Flow Studio availability regression: automatic recovery of a
+previously submitted Flow export could hold its long-running watcher lock while
+the user pressed Create.  The batch entry point then returned without starting
+the selected rows, which made the button look inert.  Recovery now remains
+strictly target-bound and download-only while new Flow tasks queue normally;
+the existing per-Profile stage coordinator continues to serialize only the
+short browser-sensitive composer stages.
+
+Final worker status updates now tolerate a Flow Studio window that was closed
+while a task was still finishing.  Destroyed Tk labels/buttons are ignored
+instead of raising a callback error or leaving the Flow batch counter stuck.
+Kling workflow and its UI are unchanged.
+
+R149 fixes a real Flow recovery deadlock.  A submitted Flow batch deliberately
+keeps one verified authenticated Chrome renderer idle for the next task.  The
+old “Quét video chờ” recovery attempted to reserve a second owner for that same
+Google Profile and consequently reported the existing renderer as another Tool
+window.  The scanner now borrows the verified in-process Flow lease, opens a
+new target-bound tab for each exact saved Project, and returns the borrowed
+lease to its idle owner after the scan.  It still never creates, uploads,
+prompts, generates, or exports from another task’s tab.
+
+This specifically repairs the R148 states where accepted Flow exports remained
+``download-pending`` with a local Chrome/CDP connection error.  Existing
+pre-R138 journal entries lacking isolated-project proof remain deliberately
+pending rather than risking an incorrect video download; all new isolated Flow
+projects can be recovered and deduplicated by their stable source identity.
+
+R148 makes the Google Flow/Veo Studio the actual user-facing workflow while
+leaving Kling unchanged.  A normal Flow create lease now hides its authenticated
+Chrome renderer after DevTools is healthy, so users create, queue, inspect and
+recover work from the Studio rather than interacting with browser tabs.  The
+explicit Profile Login action remains visible for Google sign-in or verification.
+
+Flow's "Not successful" / "Something went wrong" provider notices are now a
+terminal task failure, even if the browser previously returned an HTTP 2xx for
+the asynchronous start request.  Such a row is never reported as rendering,
+never left as an automatic-download pending task, and never imported to the
+library.  Successful Flow exports still use Flow's official Download action,
+are validated and deduplicated before they enter the common library; original
+provider/SynthID provenance is preserved.
+
+The Flow Studio no longer injects a sample prompt.  Its command card starts
+empty and shows the actual typed character count, preventing accidental reuse
+of placeholder text in a new video task.
+
+R147 rebuilds the Google Flow/Veo queue around a clean-room, slot-based
+workflow inspired only by the observable behavior of the supplied reference
+application.  Each Task uses an isolated Flow tab and a new Project, while the
+browser-sensitive stages are gated per Google Profile:
+
+1. open the new Project;
+2. upload and attach the Start Frame;
+3. select/verify Video, synchronize settings and commit the Prompt; and
+4. send Generate and wait for Flow's acknowledged request.
+
+Only these short stages are serialized for one Profile.  Acknowledged renders,
+official export watching and verified library imports remain parallel, and
+different Google Profiles are independent.  This replaces the prior broad
+per-Profile lock that could appear permanently busy after a browser/UI race.
+
+The Flow composer detector also stops treating the normal Start/End attachment
+chips as proof that Agent mode is active.  Agent is toggled only with local
+Agent-instruction or explicit active-state evidence and only when no local
+Video/model control exists.  This prevents an already valid ``Video · 4s ·
+x1`` composer from being toggled away before the Prompt or Generate action.
+
+R146 strengthens the R145 Agent-mode transition when Google Flow ignores the
+first compositor click. The Tool now retries the one already-proven local
+``Tác nhân`` pill through DOM, keyboard and visible native click fallbacks,
+checking after every attempt that the standard composer has appeared. It never
+clicks a page-wide Agent control or submits while the Agent state persists.
+
+R145 fixes the Flow Agent/standard-composer boundary shown in the live browser:
+- A visible ``Video · 4s · x1`` chip is no longer treated as a valid Video
+  composer while local ``Tác nhân`` plus ``Bắt đầu/Kết thúc`` evidence proves
+  that Flow Agent is still active.
+- For Start Frame, Flow now attaches the selected image first, then turns off
+  Agent, proves the standard Video composer and only afterwards configures,
+  commits the Prompt through Chrome's trusted input path, and enables Generate.
+- Generate remains blocked when the standard composer or Flow's internally
+  committed Prompt cannot be proven. This prevents the false ``Không thành
+  công`` submission caused by an empty Agent command state.
+
+R144 activates the dedicated VEO/Flow Studio instead of the legacy R141 Flow
+table. The new page uses an original implementation inspired by the supplied
+Studio workflow: persistent Google Profile/session badge, single creation,
+bulk Prompt paste/TXT, image-folder loading, shared image, ten task rows,
+select-all/clone actions, queue limit 1-10, pause/resume, per-row status/log,
+output path, automatic library recovery and history/library shortcuts. It is a
+presentation and queue layer over the verified R143 cookie/CDP workers; no
+Kling page, worker, account or video-creation setting is replaced.
+
+R143 changes only Google Flow/Veo session orchestration. The Tool now keeps one
+verified Chrome/Profile owner alive per Google account, preserving cookies,
+IndexedDB and service workers between batches. Each task still receives a fresh
+tab/project, but the fragile composer/upload/Generate stages are submitted
+through one short per-Profile gate; accepted renders and download watchers then
+continue in parallel. Dead unpublished Chrome leases are recovered and retried
+once, while Tool shutdown force-closes its own persistent Flow browser. Kling is
+unchanged.
+
+R142 introduces a dedicated Flow/Veo Studio workspace inspired by the
+reference layout: isolated Flow account bar, dark high-contrast sidebar,
+prompt/TXT/folder batch modes, shared model/mode/duration/aspect/output
+settings, ten-row task table, pause/resume queue, random submit delay, output
+folder controls, selectable rows and compact status badges. The new page is
+mounted through ``veo_flow_studio.py`` and delegates only provider operations
+to the existing verified GoogleFlowCreator adapter; Kling screens and workers
+are unchanged. Flow model choices now include the supported Veo 3.1 variants
+and x1-x4 output validation is kept in one request preflight path.
+
+R141 fixes two independent Flow failures exposed by parallel Tasks. A fresh
+Project which first renders the generic "Bạn muốn tạo gì?" composer is now
+handed to a bounded, composer-local Video selector. The Tool opens the
+Image/Video popover from the Nano Banana/Omni/Veo model chip, never the global
+Agent settings or left Video library filter, and re-resolves the control after
+React remounts.
+
+The exact Google endpoint ``video:batchAsyncGenerateVideoStartImage`` is now
+accepted only after its HTTP 2xx response. This covers Flow responses with an
+empty/opaque body and no public Task ID while still rejecting telemetry and
+HTTP/network errors. The accepted request is journaled before the render wait,
+then its exact Project watcher discovers completed poster/video cards, invokes
+only Flow's official Download/MP4 action, validates the resulting file and
+imports it into the shared Video Library. Startup/manual recovery and immutable
+provider/content hashes prevent duplicate downloads/imports.
+
+R141 also stops assuming that a 4s request means the Flow web composer is 4s.
+The fast path is used only when one composer-local control proves Video, 4s,
+9:16 and x1 together; inherited 6s/8s/10s settings are synchronized instead.
+
+R140 fixes the Google Flow failure where a Prompt looked visible but Flow replied
+"you must provide a prompt" after the Generate arrow was pressed.  The Tool no
+longer writes text directly into Flow's React/contenteditable DOM or fabricates
+Input events.  It binds the one active composer editor, focuses it through
+Chrome, clears only that editor, and enters the Prompt with trusted CDP keyboard
+input in bounded chunks.
+
+The Generate path now requires two stable readbacks from that same bound editor
+and an enabled arrow in the same composer.  It proves the Prompt again directly
+before Generate, with one native re-entry if Flow remounted the editor after an
+attachment/configuration change.  If Flow nevertheless returns its missing-
+Prompt toast, the Tool stops with a clear diagnostic instead of pressing Enter
+or blindly resubmitting an uncommitted request.
+
+R139 makes accepted Google Flow exports durable across an interrupted Tool
+session.  Before waiting for the render, the Tool writes a non-secret journal
+with the exact Flow Project, submitted-task identity, expected duration and a
+stable provider source identity.  On the next Tool launch it safely resumes
+only that saved Project; the new Profile or All Profiles scan buttons use the
+same recovery path.  Recovery never uploads, types a Prompt, opens a New
+Project, or clicks Generate again.
+
+The library now deduplicates Flow exports by a real ``flow://profile/project/
+task`` identity (as well as the final file hash), rather than treating every
+provider-local URI as an empty URL.  The original Flow export is retained with
+``original-export-synthid-preserved`` provenance; no Flow/SynthID watermark is
+removed or obscured.  Visible Flow login windows also stop restoring old tabs,
+so an old Project cannot be selected ahead of the clean Flow-home route used by
+each new task.
+
+R138 rebuilds the Flow task entry path for reliable second and later video jobs.
+Each generation now owns a fresh Flow tab and opens a New Project from Flow home;
+the Tool no longer restores or reuses an arbitrary old /project/ tab. A project is
+accepted only after this run's New Project action and a verified /project/ route.
+The Video composer must be selected and proven before Start Frame upload, then proven
+again after Flow remounts the prompt bar. The selector is scoped to the popup opened
+by that exact composer, never a similarly named sidebar/media-library Video control.
+
+R137 fixes a stale Google Flow creation marker after a reboot or interrupted Tool run.
+The first Create request now acquires the durable profile lock, proves the exact Chrome
+profile is no longer owned, clears only the stale Flow reservation, and then receives a
+new token. A live Chrome owner or another Tool window remains fail-closed and is never
+reclaimed. Startup maintenance now also retires stale Flow creation owners.
+
+R107 recognizes Flow's generic labs.google/batchexecute POST-RPC generation traffic
+instead of requiring video words in the URL. It verifies response operation/queue
+evidence and new progress/video UI. Only when no POST/RPC or UI change exists after
+five seconds does it perform one native Windows click on the proven arrow target.
+Flow Profile lock waiting is also extended to 30 seconds before reporting a conflict.
+
+R106 simplifies Flow to the user's proven current-project workflow and fixes the
+provider to Gemini Omni Flash. It reuses the saved project session and performs
+only media upload, image-use consent, asset selection, Add to prompt, Prompt input
+and the composer arrow. The unstable settings-panel automation is no longer called.
+
+R105 implements Flow's explicit final media-picker action "Add to prompt / Thêm vào
+Câu lệnh". After selecting the uploaded thumbnail, the Tool keeps polling for this
+exact action, clicks it once, and waits for both library closure and composer image
+evidence instead of assuming thumbnail selection attaches the Start Frame.
+
+R104 requires visual attachment evidence near the composer before upload can pass;
+the background Prompt editor alone is no longer sufficient. The settings deadline
+is extended for Flow's expensive DOM scans so center/right/left CDP activation and
+the final real Windows click are all guaranteed a chance to run and be verified.
+
+R103 follows the current Flow workflow evidenced by the user's screenshot: open
+the plus/media picker, upload media, accept image-use consent, select the newly
+uploaded asset, wait until the picker closes, then configure Video, enter Prompt
+and Generate. The Tool no longer opens Video settings before attaching the image.
+
+R102 adds a serialized native Windows-input fallback for the visible Flow Chrome.
+After all verified CDP clicks fail, the Tool brings the exact Flow tab/window to
+front, converts the proven CSS button center to screen coordinates, and performs
+one real OS mouse click. It still requires panel evidence before proceeding.
+
+R101 corrects the anchor revealed by R100 diagnostics: candidate text was centered
+near x=897, while the real settings BUTTON was [879,831,88,34] with center x=923.
+The Tool now promotes every nested match to its real parent button rectangle and
+uses trusted mouse activation at its center, right segment and left segment.
+
+R100 retains the exact proven settings BUTTON and verifies three bounded activation
+paths: trusted CDP mouse, one direct activation, then one focused Enter activation.
+Every fallback revalidates that the retained target is connected and labelled as
+the Video/model chip; no later action runs until real panel controls are visible.
+
+R99 uses the R98 evidence correctly: a chip labelled Video/crop/aspect/output means
+the composer is already in Video mode. Opening the settings panel is now verified
+by Veo/Omni model, duration and aspect controls; the Tool no longer clicks Video
+again or mistakes failure to find one unique Video tab for a closed panel.
+
+R98 replaces shallow Flow inspection with recursive open-Shadow-DOM discovery and
+Chrome Accessibility Tree targeting. When the settings panel still cannot open,
+the copied task log records viewport, prompt boxes, iframe/shadow-root counts,
+AX evidence and elementFromPoint samples around the attempted chip coordinate.
+
+R97 adds a geometry-based settings-chip fallback for Flow sessions whose current
+model chip is visually rendered but exposes no readable DOM text. It anchors the
+click to the active bottom Prompt editor and requires the unique Video tab to open
+before any subsequent selection, preventing blind or false-positive interaction.
+
+R96 fixes delayed/non-button settings chips after a project reload. The Tool waits
+up to 20 seconds and finds the smallest visible Nano Banana/Omni/Veo text element
+in the prompt bar across button, role, tabindex, span and div nodes. Conservative
+profile-lock cleanup also gets two bounded rechecks before rejecting the first run.
+
+R95 rebuilds Flow automation from the user's four screenshots of the current UI.
+It opens the bottom settings chip, switches Image to Video, maps Start Frame to
+Frames/Khung hình, verifies ratio/model/duration/output, uploads through the plus
+button, and submits with the icon-only arrow at the prompt bar's right edge.
+
+R94 fixes the empty Generate candidate list. Dynamic labels are read from aria-label,
+title, data-testid, name and visible text (including credit suffixes); submit buttons
+are supported, disabled candidates remain visible in diagnostics, and the Tool waits
+up to 15 seconds for the verified composer action to become enabled.
+
+R93 fixes restored /project/.../edit sessions whose DOM remains completely empty.
+After 12 seconds the exact project reloads once; if it is still empty for another
+18 seconds, the Tool returns to Flow home and opens a fresh project. Both recovery
+actions are bounded and included in COPY LOG diagnostics.
+
+R92 fixes Flow pages containing multiple Generate buttons. The Tool now ranks only
+enabled Generate/Create actions by their active video-composer relationship,
+Prompt distance and Start Frame/Veo context, rejects score ties, and records every
+candidate's score in COPY LOG instead of requiring a unique label across the page.
+
+R91 fixes the R90 count=0 diagnosis: Flow was hiding the composer behind its
+Start Frame asset/upload layer. Image inputs are now ranked by Start Frame context,
+the Tool waits for preview processing, confirms one exact dialog action when needed,
+and enters Prompt only after the real composer is visible and no longer busy.
+
+R90 keeps Google AI Pro / Flow as the credit provider (no Gemini API billing).
+Prompt entry now waits for the Start Frame upload to stop remounting the React
+composer, ranks the correct editor by Flow context, verifies it twice, and retries
+up to three times with exact editor diagnostics instead of failing immediately.
+
+R89 verifies that New Project actually changed Flow instead of trusting a delivered
+mouse event. If an overlay swallows it, the unique project button is activated by
+DOM up to two more times at eight-second intervals. Timeout logs now include URL,
+prompt/upload/generate evidence and the exact project-open attempt count.
+
+R88 fixes the 75-second Flow home/project wait shown by the complete R87 log.
+The home-page New Project action is issued once, the Tool reports that transition,
+and the composer is accepted before Generate mounts when prompt plus upload/model
+evidence proves that the real workspace is ready.
+
+R87 fixes Flow click dispatch timeouts by allowing the Chrome mouse event more
+time and falling back to one exact DOM click only when the target is unique.
+Each Flow task now has COPY LOG; clicking its status also copies the complete
+timestamped history, task settings, Profile, image and prompt for diagnostics.
+
+R86 fixes the exact localized Flow home screen shown by the user. Workspace
+entry now recognizes and clicks Vietnamese "+ Dự án mới/Tạo dự án", normalizes
+diacritics once, avoids duplicated innerText/textContent labels, and recognizes
+Vietnamese Tạo/Đang tạo queue states. The UI also warns that Incognito cannot
+retain the Google Profile cookie.
+
+R85 fixes Flow returning only its landing page after a successful OAuth callback.
+Google login and creation now restore the Profile's previous session, while Flow
+creation uses a visible Chrome rendering surface because its project/composer is
+not reliably mounted headless. A persistent landing response is reported as an
+account subscription/region/workspace-access issue instead of a generic timeout.
+
+R84 fixes Google's "browser or app may not be secure" login rejection. Visible
+Google authentication now launches a completely standard Chrome window without
+DevTools/remote-debugging or automated clicks. The user manually clicks Create
+with Google Flow and completes Google consent once; the isolated Profile retains
+the resulting cookie for later creation sessions.
+
+R83 rebuilds Flow around ten video-job rows rather than one row per account.
+Every row defaults to Profile 1, can switch to a saved fallback Profile, and can
+clone Profile/image/prompt from row 1. Batch execution holds one persistent Chrome
+lease per Google Profile and submits its jobs sequentially, allowing Google to
+render them concurrently without corrupting a shared cookie directory.
+
+R82 fixes Flow's red workspace-not-ready error by automatically moving the
+visible Google Profile from the public Flow landing page into the required AI
+Test Kitchen OAuth/workspace step. Workspace waiting is extended to 75 seconds
+with exact login/consent/landing diagnostics. Pasted email|password rows are
+sanitized to email only; Google credentials are never stored by the Tool.
+
+R81 separates Kling and Google Veo/Flow into two provider workspaces. Google
+accounts are managed by a dedicated list and persistent flow-profiles storage,
+never inherited from Kling checkboxes or cookies. Both pages expose an explicit
+provider switch, and Flow supports independent selection, login, removal and batch.
+
+R80 makes Google login the explicit first Flow/Veo step. It adds a prominent
+bulk-login command plus a login button on every selected row. Each Google account
+uses its own persistent Chrome Profile, and up to four visible login windows are
+tiled 2x2 so multiple Flow subscriptions can be prepared independently.
+
+R79 adds Google Flow / Veo as an isolated bulk-video provider with persistent
+Google-profile login, shared model/mode/duration/aspect/output controls, per-row
+reference images and prompts, four concurrent queued workers, strict Task/Queue
+acknowledgement, and safe manual import into the common Video Library/Editor.
+Flow task metadata is isolated from Kling background tracking and download replay.
+
+R78 makes every bulk-signup row use the complete single BẮT ĐẦU BrowserSession
+OTP/verification/onboarding stages while retaining four parallel sessions and a
+FIFO queue. Batch video creation now performs up to three automatic re-creation
+attempts after any unaccepted run, shows each retry, and never retries after a
+verified Task ID or Queue acknowledgement.
+
+R77 removes false insufficient-Credit detection from arbitrary body/composer DOM
+mutations. Post-Generate evidence must now come from a visible semantic toast,
+alert/status/queue carrier, a newly visible dialog, or the exact generation API.
+UI-only Credit rejection is explicitly distinguished from Tool cost calculation.
+
+R76 fixes Motion upload rediscovery after a late Welcome/One-click Page.reload.
+The creator now restores VIDEO 2.6, 720P and the unique active-composer marker
+before rediscovering the fresh Motion file input. It refuses unsafe recovery if
+another upload slot was already committed, preventing lost or duplicate inputs.
+
+R75 fixes the transient Uncaught failure after Kling's Welcome/One-click recovery.
+After Page.reload the creator now waits for two stable composer observations before
+upload, tolerates only transient destroyed execution contexts, and records the full
+JavaScript exception description instead of the unhelpful single word "Uncaught".
+
+R74 adds configurable Profile/Video-Library storage with safe copy migration,
+cache-only cleanup, a reversible light/dark theme, four tiled parallel signup
+windows, strict checked-row bulk execution, Select All/Clear controls, and a
+trusted OTP-field click fallback that retries the exact six-digit DVPro reader.
+
+R73 requires the One-click/sign-in gate to stay absent continuously for five
+seconds, not merely five fast polls. A remounted exact One-click button can be
+confirmed up to three total times before media attachment. If logged-out UI
+returns at any point, the stability timer resets and upload remains blocked.
+
+R72 adds a 2 GB free-space guard to signup, manual Profile access, and headless
+video creation. Chrome is not started when its Profile drive is nearly full,
+preventing partial pages, failed media events, and follow-on Uncaught errors.
+Welcome reload polling now tolerates the temporary JavaScript context loss while
+the new document is still loading instead of surfacing it as a UI failure.
+
+R71 handles Kling's new second survey, "What will you use Kling AI for?".
+It first closes the stacked plan-benefits Got it explainer, then selects the
+actual Other choice container (including checkbox/radio card variants) and
+clicks the enabled Submit. Composer waiting recognizes this survey after a
+shell reload instead of timing out behind the modal.
+
+R70 prevents a transient One-click disappearance from being mistaken for an
+authenticated Profile. After a real click, the gate must remain absent for five
+consecutive checks. If the exact One-click control remounts, it is clicked once
+more and verified; if still present, creation stops before attaching media.
+This keeps Motion Control on its exact route/composer after R69 reload recovery.
+
+R69 makes Welcome recovery document-safe during an active upload. When reload
+removes the stale login gate, the recovery reports success so the upload loop
+releases its old DOM probe and uploads the exact file slot once on the new page.
+DVPro OTP reading now starts in its own Profile-bound worker immediately after
+the registration Submit click, continues when the user focuses the OTP field,
+accepts only CODE OTP's six digits, then fills and submits Kling automatically.
+
+R68 adds user-managed fixed proxy configuration for normal Profile access and
+video creation. Each row can persist IP:Port:User:Pass, or one value can be
+applied to every loaded Profile. The endpoint is checked before Chrome starts,
+and authenticated proxy credentials are isolated in that Profile's local
+extension directory. Signup and bulk signup deliberately do not consume this
+setting. The former TẮT CHROME table column is replaced by PROXY PROFILE.
+
+R67 recovers the pre-upload Welcome/One-click gate without asking the user to
+press Create again. The exact One-click button inside Welcome is accepted even
+when Kling's overlay reports it as occluded; if the gate is still stale, the
+same creation page is reloaded once before any upload or Generate request.
+DVPro OTP extraction now accepts exactly six digits owned by CODE OTP, then
+uses the existing Profile-bound fill and real Submit click pipeline.
+
+R66 completes Kling's post-registration survey automatically. It selects Other
+with a real browser click, submits the survey, verifies completion, saves the
+Profile session, then closes that Profile's Chrome window after one second.
+Bulk registration keeps its concurrency slot occupied until Chrome is closed,
+so the next queued account cannot overlap the completed window.
+
+R65 removes broad numeric OTP scanning. It reads only the value directly owned
+by the exact CODE OTP/OTP CODE label and explicitly rejects four-digit calendar
+years such as 2026 before automatic Kling submission.
+
+R64 handles Kling's full Welcome/Continue-with-email modal when it covers the
+underlying One-click sign-in button. It closes the exact login modal once using
+its close control or Escape, proves One-click is exposed, then restores auth.
+
+R63 detects Kling's late Get individual plan/Got it explainer while Motion or
+image media is stalled with zero processing evidence. It closes the exact known
+explainer and replays the exact upload slot once under a dedicated retry guard.
+
+R62 restores automatic OTP completion without a shared clipboard. Each signup
+BrowserSession reads one high-confidence Kling code from its own DVPro DOM,
+returns to its own Kling tab, fills the OTP and submits once. Ambiguous codes
+are rejected and fall back to manual entry rather than crossing Profiles.
+
+R61 handles Kling's survey final step as Other -> Submit inside the exact survey
+scope. If another overlay occludes the physical click, it focuses the token-bound
+Submit control and sends one trusted Enter, then proves the survey disappeared.
+
+R60 reloads a URL-complete but shell-only Kling page exactly once, and checks
+for a late One-click sign-in gate both before opening Model and before reporting
+VIDEO 2.6 missing. Real composers, drafts, uploads and popups are never reloaded.
+
+R59 detects Kling's late Welcome/One-click sign-in gate during an otherwise
+trusted media upload. With zero preview/processing evidence, it restores the
+authenticated Profile and replays the exact upload slot once under a retry guard.
+
+R58 raises bulk signup concurrency to ten independent Profile sessions and tiles
+all ten visible Chrome windows in a 5 x 2 grid sized from the current monitor.
+Successful signup windows remain open for live progress review and manual OTP/CAPTCHA.
+
+R57 increases the batch video creation pool to ten Profiles, adds per-column
+Apply All cloning from Profile 1 for image, motion video and prompt, and adds a
+three-session bulk signup dispatcher with a bounded queue for all remaining rows.
+
+R56 aligns the final Builder regression matrix with the current VIDEO 2.6-only
+product contract. It replaces the obsolete VIDEO 3.0/R11 workspace suite in the
+build gate with the current Generate/Task confirmation regression suite, while
+retaining headless manager and all focused safety tests. The logo-library assertion
+now matches the current safe fallback that preserves a valid original video.
+
+R55 converts ChatGPT paragraph/tab/repeated whitespace into one semantic plain-text
+line before insertion, matching Kling's contenteditable reconciliation. R54 removes all supplementary-plane presentation characters that Kling's editor
+drops, including styled mathematical letters outside ordinary emoji ranges. R53 converts ChatGPT Markdown and decorative emoji to semantic plain text before
+Kling input/verification. R52 added browser-compatible UTF-16 boundary handling.
+R51 recognizes Kling's class-based Motion Orientation selection and uses one
+trusted Space-key fallback on the exact option when mouse selection is not retained. R50 clears a restored stale Kling draft a second controlled time when the requested
+Prompt is empty. R49 normalizes ChatGPT Unicode/hidden characters, inserts long prompts in bounded
+chunks, and reacquires/retries the exact editor once after a React remount. R48 handles the post-Generate Get individual plan explainer and retries Generate
+once only after proving zero generation requests and zero POST mutations. R47 normalizes Kling's duplicated survey action labels such as next next and
+finish finish while retaining exact popup scoping. R46 detects Kling's late Welcome/login overlay, performs exact One-click sign in,
+and proves the gate disappeared before Model/media work. R45 stabilizes per-Profile onboarding with physical Other/action clicks, handles
+auto-submit and late survey remounts, and accepts exact VIDEO 2.6 card prefixes. R44 reads the direct text node of Kling's current model card separately from its
+nested description, allowing exact VIDEO 2.6 selection and verification. R43 clears and re-enables the exact stalled Motion file input before the single
+controlled retry, allowing Chrome to emit a fresh trusted change event. R42 supports Kling's current role-less and class-less VIDEO 2.6 menu entries using
+exact visible model text and exact selected-value verification. R41 adds one controlled Motion upload re-arm when Kling receives trusted file events
+but never starts processing, plus clickable full per-Profile task histories. R40 fixed
+VIDEO 2.6 selection against Kling's current model menu. Live diagnostics
+proved VIDEO 2.6 text was visible, but Kling omitted the legacy role/class attributes
+used by the old option detector.
+
+The Tool now locates an exact visible model-name node (name-new, model-name or
+version-title) whose primary text is exactly VIDEO 2.6, resolves its nearest model card
+and clicks it. Matching remains exact, so VIDEO 3.0 and Turbo cannot be selected.
+
+Batch row errors now show more detail and the footer preserves the latest full error.

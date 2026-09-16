@@ -1,0 +1,9 @@
+# Temporary and cache files
+*.log
+*.dmp
+*.pyc
+__pycache__/
+logs/*.log
+profiles/*/Cache/
+profiles/*/Code Cache/
+profiles/*/GPUCache/

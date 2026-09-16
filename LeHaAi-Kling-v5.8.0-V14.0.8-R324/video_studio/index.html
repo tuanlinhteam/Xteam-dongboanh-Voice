@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Auto Combo Tool · Video Studio</title>
+  <link rel="stylesheet" href="studio.css">
+</head>
+<body>
+<header class="app-header">
+  <div>
+    <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 42 46"><path d="M3 3 9 7V36H20V43H3Z M14 6 20 10V20H30V8L37 3V43H30V27H20V32H14Z"/></svg></span>
+    <div class="brand-copy"><h1>Auto Combo Tool</h1><p>Kling - Veo - Dola</p></div>
+  </div>
+  <div class="header-actions"><button id="refresh">Làm mới</button><button id="openFolder">Thư mục video tải</button><button id="openExports">Thư mục video đã ghép</button></div>
+</header>
+<nav class="main-nav">
+  <button class="nav active" data-view="library">Thư viện Video</button>
+  <button class="nav" data-view="editor">Video Editor</button>
+  <span id="count">0 video</span>
+</nav>
+<main>
+  <section id="libraryView" class="view active">
+    <div class="toolbar">
+      <div><button id="uploadLibrary">⬆ Tải video lên</button><input id="libraryVideoFile" type="file" accept="video/mp4,video/quicktime,video/webm,video/x-m4v" hidden><button id="selectAll">☑ Chọn tất cả</button><button id="clearAll">⊘ Bỏ chọn</button><strong id="selectedCount">Đã chọn 0</strong></div>
+      <div><button id="publishTikTokSelected" class="tiktok-action" disabled>Đăng hàng loạt</button><button id="tiktokSettings">TikTok · Tài khoản & lịch đăng</button><button id="editSelected" class="accent" disabled>✎ Chỉnh sửa</button><button id="deleteSelected" class="danger" disabled>🗑 Xóa</button></div>
+    </div>
+    <nav class="library-jump" aria-label="Danh mục thư viện">
+      <button class="provider-filter active" data-provider-filter="all">▦ Tất cả <b id="allMenuCount">0</b></button>
+      <button class="provider-filter" data-provider-filter="kling">◆ Kling <b id="klingMenuCount">0</b></button>
+      <button class="provider-filter" data-provider-filter="veo">✦ Veo–Flow <b id="veoMenuCount">0</b></button>
+      <button class="provider-filter" data-provider-filter="seedance">◈ Dola <b id="dolaMenuCount">0</b></button>
+      <button class="provider-filter" data-provider-filter="local">▣ Nội bộ <b id="localMenuCount">0</b></button>
+      <button data-scroll-section="mergedSection">⛓ Đã ghép <b id="mergedMenuCount">0</b></button>
+      <button data-scroll-section="editedSection">✎ Đã chỉnh sửa <b id="editedMenuCount">0</b></button>
+      <button id="removeLogosSelected" class="accent" style="margin-left:auto" disabled title="Chọn video Dola để xử lý logo; bản gốc được giữ lại">Xóa logo Dola</button>
+      <button id="mergeSelected" class="primary merge-sticky" style="margin-left:0" disabled>⛓ Ghép Video</button>
+    </nav>
+    <details id="logoBatchDetails" hidden><summary>Tiến độ xóa logo</summary><span id="logoBatchStatus" role="status" aria-live="polite"></span><pre id="logoBatchErrors" style="white-space:pre-wrap"></pre></details>
+    <section class="library-group" id="sourceSection"><div class="group-title"><h2>▦ Video nguồn</h2><span id="sourceCount">0 video</span></div><div id="sourceGrid" class="grid"></div></section>
+    <section class="library-group" id="mergedSection"><div class="group-title"><h2>Video đã ghép</h2><span id="mergedCount">0 video</span></div><div id="mergedGrid" class="grid"></div></section>
+    <section class="library-group" id="editedSection"><div class="group-title"><h2>Video đã chỉnh sửa</h2><span id="editedCount">0 video</span></div><div id="editedGrid" class="grid"></div></section>
+  </section>
+
+  <dialog id="tiktokDialog" class="social-dialog">
+    <div class="social-card">
+      <header><div><b>Đăng video TikTok</b><small id="tiktokConnection">Profile riêng cho từng tài khoản</small></div><button id="closeTikTok" aria-label="Đóng">×</button></header>
+      <nav class="tt-steps"><span>01 · Chọn video</span><span>02 · Tài khoản</span><span>03 · Nội dung & lịch</span><span>04 · Theo dõi</span></nav>
+      <div class="tt-layout">
+        <section><h3>Tài khoản TikTok</h3><div class="tt-add"><input id="tiktokDisplayName" placeholder="@tên_kênh"><button id="saveTikTok" type="button">＋ Thêm nick</button></div><div id="ttAccounts"></div><small>Đăng nhập trên TikTok. Cookie được Chrome lưu trong profile riêng trên máy.</small></section>
+        <section class="social-compose">
+          <strong id="tiktokSelectedText">0 video được chọn</strong><div id="ttVideos" class="tt-videos"></div><details open class="tt-individual"><summary>Nội dung riêng từng video</summary><div id="ttItems"></div></details>
+          <label>Đăng bằng tài khoản<select id="ttAccount"></select></label>
+          <label>Caption chung / hashtag<textarea id="tiktokCaption" maxlength="2200" placeholder="Nội dung bài đăng cho các video đã chọn"></textarea></label>
+          <div class="social-grid"><label>Thời gian bắt đầu<input id="tiktokSchedule" type="datetime-local"></label><label>Cách nhau (phút)<input id="ttInterval" type="number" min="1" max="1440" value="30"></label></div>
+          <small>Để trống thời gian để bắt đầu ngay. Lịch dùng giờ máy tính; cần mở Thư viện Video và bật máy.</small>
+          <div class="social-grid"><label>Sản phẩm muốn gắn<input id="ttProduct" placeholder="Tên/mã để đối chiếu trên TikTok"></label><label>Nhạc TikTok muốn chọn<input id="ttMusic" placeholder="Tên bài để tìm trên TikTok"></label></div>
+          <button id="ttApplyAll" type="button">Áp dụng nick, caption, lịch và ghi chú chung cho các video</button><p class="tt-notice">Bản kiểm thử trình duyệt: tự tải video và điền caption, dừng tại bước kiểm tra. Chọn sản phẩm, nhạc TikTok và bấm Đăng trên trang. Chưa bật đăng ẩn hoặc tự động gắn giỏ/nhạc.</p>
+          <label class="consent"><input id="tiktokConsent" type="checkbox"> Tôi đã kiểm tra video, caption và chọn đúng nick.</label>
+          <button id="ttSaveDraft" type="button">Lưu nháp</button><button id="queueTikTok" type="button" class="tiktok-action">Chuẩn bị đăng / Lưu lịch</button>
+        </section>
+      </div>
+      <section><div class="social-submit"><h3>Lịch đăng & tiến trình</h3><div><button id="ttPause">Tạm dừng</button><button id="ttRefresh">Làm mới</button></div></div><div id="ttSummary" class="tt-summary"></div><div class="tt-filters"><input id="ttSearch" placeholder="Tìm video hoặc @nick"><select id="ttStatus"><option value="">Tất cả trạng thái</option value="draft">Bản nháp</option><option value="scheduled">Đã lên lịch</option><option value="queued">Đang chờ</option><option value="review">Chờ kiểm tra & đăng</option><option value="needs_attention">Cần xử lý</option><option value="uncertain">Cần đối chiếu</option><option value="done">Đã đăng</option><option value="cancelled">Đã hủy</option></select></div><div id="tiktokJobs" class="social-jobs"></div></section>
+    </div>
+  </dialog>
+
+  <dialog id="ttEditDialog" class="social-dialog" style="max-width:650px"><form method="dialog" class="social-card"><header><b>Sửa nội dung & lịch</b><button value="cancel">×</button></header><input id="ttEditId" type="hidden"><label>Tài khoản<select id="ttEditAccount"></select></label><label>Caption<textarea id="ttEditCaption" maxlength="2200"></textarea></label><label>Thời gian<input id="ttEditAt" type="datetime-local"></label><label>Ghi chú sản phẩm<input id="ttEditProduct" maxlength="300"></label><label>Ghi chú nhạc TikTok<input id="ttEditMusic" maxlength="300"></label><button id="ttEditSave" type="button" class="tiktok-action">Lưu thay đổi</button></form></dialog>
+  <dialog id="ttPreviewDialog" class="social-dialog" style="max-width:540px"><form method="dialog" class="social-card"><header><b>Xem video trước khi đăng</b><button>×</button></header><video id="ttPreviewVideo" controls preload="metadata" style="width:100%;max-height:65vh"></video></form></dialog>
+
+  <section id="editorView" class="view editor-view">
+    <div class="editor-top">
+      <div><button id="backLibrary">← Thư viện</button><strong>Dự án Kling</strong><span id="projectInfo">0 đoạn</span></div>
+      <div class="editor-audio-quick"><label class="file-label">＋ Thêm nhạc<input id="audioFile" type="file" accept="audio/*"></label><button id="extractAudioTop">Tách MP3 từ video máy</button><input id="extractAudioFile" type="file" accept="video/mp4,video/quicktime,video/webm,video/x-m4v" hidden><div class="audio-url-top"><input id="audioUrl" placeholder="Dán URL TikTok"><button id="importAudioUrl">Lấy MP3</button></div></div>
+      <div><button id="undo" title="Ctrl+Z">↶ Hoàn tác</button><button id="redo" title="Ctrl+Y">↷ Làm lại</button><button id="export" class="primary">Xuất video</button></div>
+    </div>
+
+    <div class="editor-shell">
+      <aside class="assets panel">
+        <div class="panel-heading"><h3>Media</h3><span>Kéo xuống timeline</span></div>
+        <label class="file-label">＋ Nhập video từ máy tính<input id="videoFile" type="file" accept="video/mp4,video/quicktime,video/webm,video/x-m4v"></label>
+        <div id="assetList" class="asset-list"></div>
+        <h3>Văn bản</h3>
+        <textarea id="textOverlay" placeholder="Nhập chữ phủ lên toàn bộ video..."></textarea>
+        <div class="text-options">
+          <label>Cỡ chữ<input id="textSize" type="number" min="16" max="220" value="52"></label>
+          <label>Màu chữ<input id="textColor" type="color" value="#ffffff"></label>
+          <label>Màu viền<input id="outlineColor" type="color" value="#000000"></label>
+          <label>Độ dày<input id="outlineWidth" type="number" min="0" max="12" value="3"></label>
+          <label>Vị trí<select id="textPosition"><option value="top">Phía trên</option><option value="center">Chính giữa</option><option value="bottom" selected>Phía dưới</option></select></label>
+        </div>
+        <h3>Âm thanh</h3>
+        <button id="extractAudio">Tách MP3 từ video trên máy</button>
+        <small class="audio-url-note">Chỉ dùng video công khai mà bạn sở hữu hoặc được phép sử dụng âm thanh.</small>
+        <button id="removeAudio" class="danger-lite" disabled>Xóa nhạc</button>
+        <label>Âm lượng nhạc<input id="musicVolume" type="range" min="0" max="2" step="0.05" value="1"></label>
+        <small id="audioInfo">Chưa có nhạc trên timeline</small>
+      </aside>
+
+      <section class="viewer panel">
+        <div class="preview-toolbar"><button id="previewPlay">▶</button><span id="previewTime">00:00.00 / 00:00.00</span><label>Zoom khung xem <input id="previewZoom" type="range" min="50" max="160" step="5" value="100"></label></div>
+        <div class="preview-wrap"><video id="preview" playsinline preload="metadata"></video><div id="cropBox" class="crop-box" hidden data-crop-move title="Kéo bên trong để di chuyển · Shift+kéo để giữ tỷ lệ"><i data-crop-handle="nw"></i><i data-crop-handle="n"></i><i data-crop-handle="ne"></i><i data-crop-handle="e"></i><i data-crop-handle="se"></i><i data-crop-handle="s"></i><i data-crop-handle="sw"></i><i data-crop-handle="w"></i><span class="crop-rule thirds-a"></span><span class="crop-rule thirds-b"></span><span class="crop-rule thirds-c"></span><span class="crop-rule thirds-d"></span></div><div id="previewEmpty">Kéo video xuống timeline để bắt đầu</div></div>
+        <div class="viewer-info" id="viewerInfo">Sẵn sàng</div>
+      </section>
+
+      <aside class="inspector panel">
+        <div class="panel-heading"><h3>Kho nhạc MP3</h3><span id="audioAssetCount">0 file</span></div>
+        <div id="audioAssetList" class="audio-asset-list"><small>Chưa có nhạc đã lưu</small></div>
+        <hr class="inspector-divider">
+        <div class="panel-heading"><h3>Thuộc tính clip</h3><span id="activeClipName">Chưa chọn</span></div>
+        <div id="audioClipVolumeBox" class="audio-clip-volume-box" hidden>
+          <label>Âm lượng nhạc<input id="audioClipVolume" type="range" min="0" max="2" step="0.05" value="1"></label>
+          <span id="audioClipVolumeValue">100%</span>
+          <label>Tốc độ nhạc<input id="audioClipSpeed" type="range" min="0.5" max="2" step="0.05" value="1"></label>
+          <span id="audioClipSpeedValue">1.00x</span>
+        </div>
+        <label>Cắt đầu (giây)<input id="clipStart" type="number" min="0" step="0.01"></label>
+        <label>Cắt cuối (giây)<input id="clipEnd" type="number" min="0" step="0.01"></label>
+        <label>Tốc độ<input id="clipSpeed" type="range" min="0.25" max="4" step="0.05" value="1"></label><span id="speedValue">1.00x</span>
+        <label>Âm lượng gốc<input id="clipVolume" type="range" min="0" max="2" step="0.05" value="1"></label><span id="volumeValue">100%</span>
+        <label>Hiệu ứng<select id="clipEffect"><option value="none">Không</option><option value="bright">Sáng rõ</option><option value="cinematic">Cinematic</option><option value="sharp">Sắc nét</option><option value="bw">Đen trắng</option><option value="warm">Tone ấm</option><option value="cool">Tone lạnh</option></select></label>
+        <label>Chuyển cảnh<select id="clipTransition"><option value="none">Không</option><option value="fade">Fade mượt</option></select></label>
+        <button id="split" class="accent">✂ Tách tại đầu phát</button>
+        <button id="cutBefore">Cắt bỏ phần trước đầu phát</button>
+        <button id="cutAfter">Cắt bỏ phần sau đầu phát</button>
+        <button id="removeClip" class="danger">Xóa đoạn</button>
+      </aside>
+    </div>
+
+    <section class="timeline-panel panel">
+      <div class="timeline-tools">
+        <span id="activeTrackBadge" class="active-track-badge none">CHƯA CHỌN</span>
+        <button id="timelinePlay">▶ Phát</button><button id="timelineSplit">✂ Tách</button><button id="timelineCopy" title="Ctrl+C">⧉ Copy</button><button id="timelinePaste" title="Ctrl+V">▣ Paste</button><button id="timelineCutBefore">Cắt trái</button><button id="timelineCutAfter">Cắt phải</button><button id="timelineDelete" class="danger-lite">⌫ Xóa</button><span class="hint">Ctrl + bấm để chọn nhiều đoạn video/nhạc và sửa chung</span>
+        <span class="hint">Kéo trực tiếp hai mép vàng để cắt · Ctrl+C/V sao chép đoạn · kéo thân clip để đổi vị trí</span>
+        <label class="zoom-control">Thu phóng timeline <input id="timelineZoom" type="range" min="35" max="240" step="5" value="90"><span id="timelineZoomValue">90 px/s</span></label>
+        <span id="timelineDuration">0.0s</span>
+      </div>
+      <div id="timelineScroller" class="timeline-scroller">
+        <div id="timelineCanvas" class="timeline-canvas">
+          <div id="timeRuler" class="time-ruler"></div>
+          <div class="track-label">VIDEO<button id="videoTrackMute" title="Bật/tắt âm toàn bộ dòng Video">🔊</button></div>
+          <div id="videoTrack" class="video-track"><div class="drop-hint">Kéo Media vào đây</div></div>
+          <div class="track-label audio-label">NHẠC<button id="audioTrackMute" title="Bật/tắt âm toàn bộ dòng Nhạc">🔊</button></div>
+          <div id="audioTrack" class="audio-track"><button id="audioTrackAdd" class="audio-track-add">＋ Thêm nhạc</button><span id="audioTrackText">Chưa có nhạc</span><div id="audioClips"></div></div>
+          <div id="playhead" class="playhead"><span></span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="library-group editor-edited-section" id="editorEditedSection">
+      <div class="group-title"><h2>Video vừa Edit</h2><span id="editorEditedCount">0 video</span></div>
+      <div id="editorEditedGrid" class="grid edited-grid"></div>
+      <div id="editedPager" class="library-pager"></div>
+    </section>
+
+  </section>
+</main>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+<audio id="musicPreview" preload="auto"></audio>
+<audio id="audioAssetPreview" preload="none"></audio>
+<dialog id="busy"><div class="spinner"></div><strong id="busyTitle">Đang xử lý video…</strong><div id="exportProgressWrap" hidden><progress id="exportProgress" max="100" value="0"></progress><b id="exportProgressText">0%</b></div><p>Không đóng tool trong khi FFmpeg đang chạy.</p></dialog>
+<dialog id="exportSuccess" class="success-dialog">
+  <div class="success-mark">✓</div>
+  <h2>Xuất video thành công</h2>
+  <p>Video đã được lưu an toàn và đã thêm vào Thư viện Video.</p>
+  <div class="success-file"><small>Vị trí lưu</small><strong id="exportSuccessPath"></strong></div>
+  <div class="success-actions"><button id="exportSuccessClose">Hoàn tất</button><button id="exportSuccessFolder" class="primary">Mở thư mục</button></div>
+</dialog>
+<script src="studio.js"></script>
+</body>
+</html>

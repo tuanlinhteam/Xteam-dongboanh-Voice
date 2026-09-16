@@ -1,0 +1,14 @@
+AUTO COMBO TOOL - KLING VIDEO STUDIO v5.8.0
+CODE REVISION: V14.0.8-R324
+
+1. Giai nen TOAN BO file ZIP.
+2. Mo thu muc LeHaAi-Kling-v5.8.0-V14.0.8-R324.
+3. Chay LeHaAi-Kling-v5.8.0-V14.0.8-R324.exe.
+4. May khach KHONG can cai Python.
+5. Can co Google Chrome hoac Microsoft Edge.
+6. Khong tach rieng EXE khoi cac DLL/PYD trong thu muc.
+7. License khoa theo Ma May va duoc xac minh voi may chu Le Ha Ai.
+8. Thu vien video tu tai nam trong LOCALAPPDATA va khong mat khi cap nhat tool.
+9. Da kem FFmpeg/FFprobe cho ghep, thumbnail va Video Editor.
+
+Zalo ho tro: 0989638985
